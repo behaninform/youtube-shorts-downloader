@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YouTube Shorts Downloader</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#1f2937;background:linear-gradient(160deg,#eef2ff 0%,#fdf2f8 100%);min-height:100vh;padding:20px 14px 40px}
+  .wrap{max-width:560px;margin:0 auto}
+  .card{background:#fff;border-radius:22px;box-shadow:0 10px 30px rgba(99,102,241,.12);padding:22px;margin-bottom:16px}
+  .badge{display:inline-block;font-size:12px;font-weight:600;color:#6366f1;background:#eef2ff;border-radius:999px;padding:5px 12px}
+  h1{font-size:1.65rem;margin:12px 0 6px;line-height:1.25}
+  .sub{margin:0 0 18px;color:#6b7280;font-size:.95rem}
+  .row{display:flex;gap:8px}
+  input{flex:1;min-width:0;padding:15px 14px;border:2px solid #e5e7eb;border-radius:14px;font-size:1rem;color:#111;background:#f9fafb;outline:none}
+  input:focus{border-color:#6366f1;background:#fff}
+  .paste{flex:0 0 auto;padding:0 16px;border:2px solid #e5e7eb;border-radius:14px;background:#fff;color:#4b5563;font-weight:600;font-size:.9rem;cursor:pointer}
+  .primary{display:block;width:100%;margin-top:12px;padding:15px;border:0;border-radius:14px;color:#fff;font-size:1.05rem;font-weight:700;cursor:pointer;background:linear-gradient(90deg,#6366f1,#ec4899);box-shadow:0 6px 16px rgba(236,72,153,.25)}
+  .primary:disabled{opacity:.6}
+  #msg{margin-top:12px;font-size:.95rem;color:#dc2626;min-height:0}
+  #result{display:none}
+  .meta{display:flex;gap:14px;align-items:center}
+  .meta img{width:92px;height:122px;object-fit:cover;border-radius:12px;background:#e5e7eb;flex:0 0 auto}
+  .meta h3{margin:0 0 6px;font-size:1rem;line-height:1.35;word-break:break-word}
+  .meta p{margin:0;color:#6b7280;font-size:.88rem}
+  .label{margin:18px 0 8px;font-size:.8rem;font-weight:700;letter-spacing:.06em;color:#6b7280}
+  .opt{display:flex;align-items:center;justify-content:space-between;width:100%;padding:14px 16px;margin-bottom:8px;border:2px solid #e5e7eb;border-radius:14px;background:#fff;color:#111;font-size:1rem;font-weight:600;text-decoration:none;cursor:pointer}
+  .opt small{color:#6b7280;font-weight:500;font-size:.85rem}
+  .opt .go{color:#6366f1;font-weight:700}
+  .opt:active{background:#eef2ff;border-color:#6366f1}
+  .opt.audio .go{color:#ec4899}
+  .more{display:block;width:100%;margin-top:14px;padding:14px;border:2px solid #6366f1;border-radius:14px;background:#eef2ff;color:#4f46e5;font-size:1rem;font-weight:700;cursor:pointer}
+  .steps{display:flex;gap:10px}
+  .step{flex:1;text-align:center;font-size:.82rem;color:#4b5563}
+  .step b{display:flex;align-items:center;justify-content:center;width:34px;height:34px;margin:0 auto 6px;border-radius:50%;background:#eef2ff;color:#6366f1}
+  h2{font-size:1.05rem;margin:0 0 12px}
+  .tool{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;margin-bottom:8px;border:2px solid #e5e7eb;border-radius:14px;text-decoration:none;color:#111}
+  .tool span{display:block;font-weight:700}
+  .tool em{display:block;font-style:normal;font-size:.82rem;color:#6b7280;margin-top:2px}
+  .tool i{font-style:normal;color:#6366f1;font-weight:700;font-size:1.2rem}
+  .soon{padding:12px 16px;border:2px dashed #e5e7eb;border-radius:14px;color:#9ca3af;font-size:.9rem;text-align:center}
+  .note{font-size:.78rem;color:#6b7280;text-align:center;line-height:1.5;margin:6px 8px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="card" id="main">
+    <span class="badge">Free &amp; Fast</span>
+    <h1>YouTube Shorts Downloader</h1>
+    <p class="sub">Paste a public YouTube Shorts link, choose the quality and download.</p>
+    <div class="row">
+      <input id="url" type="url" inputmode="url" placeholder="Paste YouTube Shorts link here" autocomplete="off">
+      <button class="paste" id="paste" type="button">Paste</button>
+    </div>
+    <button class="primary" id="go" type="button">Find Video</button>
+    <div id="msg"></div>
+  </div>
+
+  <div class="card" id="result">
+    <div class="meta">
+      <img id="thumb" alt="">
+      <div><h3 id="title"></h3><p id="info"></p></div>
+    </div>
+    <div class="label">VIDEO QUALITY</div>
+    <div id="opts"></div>
+    <div class="label">AUDIO ONLY</div>
+    <a class="opt audio" id="mp3" href="#"><span>MP3 Audio <small>(sound only)</small></span><span class="go">Download</span></a>
+    <button class="more" id="more" type="button">Download more Shorts</button>
+  </div>
+
+  <div class="card" id="how">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step"><b>1</b>Copy the YouTube Shorts link</div>
+      <div class="step"><b>2</b>Paste it and tap Find Video</div>
+      <div class="step"><b>3</b>Choose quality and download</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>More free tools</h2>
+    <div id="tools"></div>
+    <div class="soon">More tools coming soon</div>
+  </div>
+
+  <p class="note">Download only content you own or have permission to save. Only YouTube Shorts are supported. Private videos are not supported. Not affiliated with YouTube or Google.</p>
+</div>
+
+<script>
+// Add more tools here later: { name, desc, url }
+var TOOLS = [
+  { name: "TikTok Video Downloader", desc: "Save public TikTok videos or MP3", url: "https://safefrominternetglobally.blogspot.com/p/tiktok-video-downloader.html" },
+  { name: "Instagram Video Downloader", desc: "Save public Instagram Reels and videos", url: "https://safefrominternetglobally.blogspot.com/p/instagram-video-downloader.html" },
+  { name: "Pinterest Video Downloader", desc: "Save public Pinterest video Pins", url: "https://safefrominternetglobally.blogspot.com/p/pinterest-video-downloader.html" },
+  { name: "YouTube Thumbnail Downloader", desc: "Download any YouTube thumbnail in HD", url: "https://safefrominternetglobally.blogspot.com/p/youtube-thumbnail-downloader.html" }
+];
+
+var $ = function (id) { return document.getElementById(id); };
+var currentUrl = "";
+
+TOOLS.forEach(function (t) {
+  var a = document.createElement("a");
+  a.className = "tool"; a.href = t.url; a.target = "_top";
+  var d = document.createElement("div");
+  var s = document.createElement("span"); s.textContent = t.name;
+  var e = document.createElement("em"); e.textContent = t.desc;
+  d.appendChild(s); d.appendChild(e);
+  var i = document.createElement("i"); i.textContent = "\u203A";
+  a.appendChild(d); a.appendChild(i);
+  $("tools").appendChild(a);
+});
+
+function fmtSize(b) { return b ? (b / 1048576).toFixed(1) + " MB" : ""; }
+function fmtDur(s) { if (!s) return ""; s = Math.round(s); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); }
+function label(h) { return h >= 1080 ? "Full HD" : h >= 720 ? "HD" : "SD"; }
+
+function reset() {
+  $("result").style.display = "none";
+  $("how").style.display = "block";
+  $("msg").textContent = "";
+  $("url").value = "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  setTimeout(function () { $("url").focus(); }, 300);
+}
+
+function addOpt(text, small, href) {
+  var a = document.createElement("a");
+  a.className = "opt"; a.href = href;
+  var l = document.createElement("span"); l.textContent = text + " ";
+  if (small) { var sm = document.createElement("small"); sm.textContent = small; l.appendChild(sm); }
+  var g = document.createElement("span"); g.className = "go"; g.textContent = "Download";
+  a.appendChild(l); a.appendChild(g);
+  $("opts").appendChild(a);
+}
+
+$("paste").onclick = function () {
+  if (navigator.clipboard && navigator.clipboard.readText) {
+    navigator.clipboard.readText().then(function (t) { $("url").value = t.trim(); }).catch(function () { $("url").focus(); });
+  } else { $("url").focus(); }
+};
+$("more").onclick = reset;
+$("url").addEventListener("keydown", function (e) { if (e.key === "Enter") $("go").click(); });
+
+$("go").onclick = function () {
+  var url = $("url").value.trim();
+  $("msg").textContent = "";
+  $("result").style.display = "none";
+  if (!url) { $("msg").textContent = "Please paste a YouTube Shorts link first."; return; }
+  $("go").disabled = true; $("go").textContent = "Checking...";
+  fetch("/api/info", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: url }) })
+    .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || "Something went wrong."); return d; }); })
+    .then(function (d) {
+      currentUrl = url;
+      $("title").textContent = d.title;
+      $("info").textContent = [d.uploader, fmtDur(d.duration)].filter(Boolean).join(" \u00B7 ");
+      if (d.thumbnail) { $("thumb").src = d.thumbnail; $("thumb").style.display = "block"; } else { $("thumb").style.display = "none"; }
+      $("opts").innerHTML = "";
+      var base = "/api/download?url=" + encodeURIComponent(url);
+      addOpt("Best quality", "(recommended)", base);
+      (d.heights || []).forEach(function (x) {
+        addOpt(x.height + "p " + label(x.height), fmtSize(x.size), base + "&h=" + x.height);
+      });
+      $("mp3").href = base + "&type=audio";
+      $("how").style.display = "none";
+      $("result").style.display = "block";
+      $("result").scrollIntoView({ behavior: "smooth", block: "start" });
+    })
+    .catch(function (e) { $("msg").textContent = e.message; })
+    .then(function () { $("go").disabled = false; $("go").textContent = "Find Video"; });
+};
+</script>
+</body>
+</html>
